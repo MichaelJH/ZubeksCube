@@ -13,7 +13,6 @@ public class Player_movement : MonoBehaviour {
     public float jumpFactor = 0.5f;
     public Transform groundCheck;
     private Rigidbody2D rb2d;
-    private Transform selfTrans;
 
     public float moveForce = 365f;
     public float maxSpeed = 5f;
@@ -25,7 +24,6 @@ public class Player_movement : MonoBehaviour {
 
     void Awake() {
         rb2d = GetComponent<Rigidbody2D>();
-        selfTrans = GetComponent<Transform>();
         grav = GravityDir.Down;
     }
 
@@ -100,21 +98,39 @@ public class Player_movement : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D coll) {
         if (coll.gameObject.tag == "Platform") {
             grounded = true;
-        } else if (coll.gameObject.tag == "Portal") {
+        }
+        // collisions with portals
+        else if (coll.gameObject.tag == "Portal") {
             GameObject collidedPortal = coll.gameObject;
             var PortalScript = GetComponent<PortalScript>();
             if (collidedPortal == PortalScript.Portal1)
             {
                 if (PortalScript.Portal2.activeSelf) {
                     Vector2 newPos = GetComponent<PortalScript>().PPos.p2;
-                    newPos.x += 1;
+                    PortalScript.WallOrientation orientation = PortalScript.PPos.p2Or;
+                    if (orientation == PortalScript.WallOrientation.Left)
+                        newPos.x += 1;
+                    else if (orientation == PortalScript.WallOrientation.Right)
+                        newPos.x -= 1;
+                    else if (orientation == PortalScript.WallOrientation.Ceiling)
+                        newPos.y -= 1;
+                    else
+                        newPos.y += 1;
                     transform.position = newPos;
                 }
             }
             else {
                 if (PortalScript.Portal1.activeSelf) {
                     Vector2 newPos = GetComponent<PortalScript>().PPos.p1;
-                    newPos.x -= 1;
+                    PortalScript.WallOrientation orientation = PortalScript.PPos.p1Or;
+                    if (orientation == PortalScript.WallOrientation.Left)
+                        newPos.x += 1;
+                    else if (orientation == PortalScript.WallOrientation.Right)
+                        newPos.x -= 1;
+                    else if (orientation == PortalScript.WallOrientation.Ceiling)
+                        newPos.y -= 1;
+                    else
+                        newPos.y += 1;
                     transform.position = newPos;
                 }
             }

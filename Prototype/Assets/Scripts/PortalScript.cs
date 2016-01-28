@@ -3,13 +3,24 @@ using System.Collections;
 
 public class PortalScript : MonoBehaviour {
     // track the position of each portal
+    public enum WallOrientation {
+        Ceiling,
+        Right,
+        Floor,
+        Left
+    }
+
     public struct PortalPosition {
         public Vector2 p1;
         public Vector2 p2;
+        public WallOrientation p1Or;
+        public WallOrientation p2Or;
 
         public PortalPosition(Vector2 p1, Vector2 p2) {
             this.p1 = p1;
             this.p2 = p2;
+            this.p1Or = WallOrientation.Left;
+            this.p2Or = WallOrientation.Left;
         }
     }
 
@@ -17,6 +28,7 @@ public class PortalScript : MonoBehaviour {
     public GameObject P1Prefab, P2Prefab;
     public GameObject Portal1, Portal2;
     public PortalPosition PPos;
+    private WallOrientation shotOr;
 
     // Use this for initialization
     void Awake()
@@ -31,21 +43,18 @@ public class PortalScript : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(Input.mousePosition);
-        //Debug.Log(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        //Mouse clicked
         //Create ray cast from player position to the platform
         if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2"))
         {
             // LayerMask is a bitmap. NameToPlayer("Platform") returns and int, and then we shift 1 to get a bitmask
-            int platform = LayerMask.GetMask("Platform");
+            int platform = LayerMask.GetMask("PortalPlatform");
 
             Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Linecast(transform.position, target, platform);
 
-            if (hit.collider.gameObject.tag == "Platform")
-            {
+            if (hit) {
                 Quaternion rotation = GetPortalRotation(hit);
+                Debug.Log("wall: " + shotOr);
 
                 if (Input.GetButtonDown("Fire1")) //If right mouse click
                 {
@@ -53,6 +62,7 @@ public class PortalScript : MonoBehaviour {
                     Portal1.transform.position = hit.point;
                     Portal1.transform.rotation = rotation;
                     PPos.p1 = hit.point;
+                    PPos.p1Or = shotOr;
                 }
                 else if (Input.GetButtonDown("Fire2")) //if left mouse click
                 {
@@ -60,8 +70,11 @@ public class PortalScript : MonoBehaviour {
                     Portal2.transform.position = hit.point;
                     Portal2.transform.rotation = rotation;
                     PPos.p2 = hit.point;
+                    PPos.p2Or = shotOr;
                 }
             }
+            else
+                Debug.Log("This failed :(");
         }
      }
 
@@ -69,16 +82,24 @@ public class PortalScript : MonoBehaviour {
     //Find the correct orientation of the portal
     private Quaternion GetPortalRotation(RaycastHit2D hit)
     {
-        Quaternion rot = Quaternion.identity;
+        Quaternion rot;
+
+        Debug.Log("beforeTag " + hit.collider.gameObject.tag);
+        string collTag = hit.collider.gameObject.tag;
+        Debug.Log("afterTag: " + collTag);
+
+        if (collTag == "Floor")
+            shotOr = WallOrientation.Floor;
+        if (collTag == "Ceiling")
+            shotOr = WallOrientation.Ceiling;
+        if (collTag == "Right_wall")
+            shotOr = WallOrientation.Right;
+        if (collTag == "Left_wall")
+            shotOr = WallOrientation.Left;
+        if (shotOr == WallOrientation.Left || shotOr == WallOrientation.Right)
+            rot = Quaternion.identity;
+        else
+            rot = Quaternion.Euler(0, 0, 90);
         return rot;
     }
-
-    //void OnCollisonEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.tag == "Portal")
-    //    {
-    //        //transform.position = portals.p2.transform.position;
-    //    }
-    //}
-
 }
