@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Player_movement : MonoBehaviour {
+    // track the direction of gravity
     private enum GravityDir {
         Up,
         Right,
@@ -59,7 +60,7 @@ public class Player_movement : MonoBehaviour {
 
     void FixedUpdate() {
         // movement controls for when gravity is up/down
-        if ((grav == GravityDir.Down || grav == GravityDir.Up)) {
+        if (move && (grav == GravityDir.Down || grav == GravityDir.Up)) {
             // get the horizontal input
             float h = Input.GetAxis("Horizontal");
 
@@ -74,7 +75,7 @@ public class Player_movement : MonoBehaviour {
         }
 
         // movement controls for when gravity is right/left
-        if ((grav == GravityDir.Left || grav == GravityDir.Right)) {
+        if (move && (grav == GravityDir.Left || grav == GravityDir.Right)) {
             // get the horizontal input
             float v = Input.GetAxis("Vertical");
 
@@ -99,6 +100,24 @@ public class Player_movement : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D coll) {
         if (coll.gameObject.tag == "Platform") {
             grounded = true;
+        } else if (coll.gameObject.tag == "Portal") {
+            GameObject collidedPortal = coll.gameObject;
+            var PortalScript = GetComponent<PortalScript>();
+            if (collidedPortal == PortalScript.Portal1)
+            {
+                if (PortalScript.Portal2.activeSelf) {
+                    Vector2 newPos = GetComponent<PortalScript>().PPos.p2;
+                    newPos.x += 1;
+                    transform.position = newPos;
+                }
+            }
+            else {
+                if (PortalScript.Portal1.activeSelf) {
+                    Vector2 newPos = GetComponent<PortalScript>().PPos.p1;
+                    newPos.x -= 1;
+                    transform.position = newPos;
+                }
+            }
         }
     }
 }

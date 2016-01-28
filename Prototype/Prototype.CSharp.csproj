@@ -65,6 +65,8 @@
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\GravityController.cs" />
     <Compile Include="Assets\Scripts\Player_movement.cs" />
+    <Compile Include="Assets\Scripts\PortalScript.cs" />
+    <Compile Include="Assets\Scripts\PortalStruct.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
