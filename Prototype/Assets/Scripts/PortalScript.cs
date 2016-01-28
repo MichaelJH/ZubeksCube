@@ -37,31 +37,25 @@ public class PortalScript : MonoBehaviour {
         //Create ray cast from player position to the platform
         if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2"))
         {
-            Vector2 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Linecast(transform.position, direction);
-            Debug.Log("Mouse: " + Input.mousePosition);
-            Debug.Log("direction: " + direction);
-            Debug.Log("hitpoint: " + hit.point);
+            // LayerMask is a bitmap. NameToPlayer("Platform") returns and int, and then we shift 1 to get a bitmask
+            int platform = LayerMask.GetMask("Platform");
 
-            if (hit.collider.gameObject.tag == "Platform" || hit.collider.gameObject.tag == "Portal")
+            Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Linecast(transform.position, target, platform);
+
+            if (hit.collider.gameObject.tag == "Platform")
             {
-                Debug.Log("You are casting ray");
-                Debug.DrawRay(transform.position, Vector2.up, Color.black);
-                
                 Quaternion rotation = GetPortalRotation(hit);
 
                 if (Input.GetButtonDown("Fire1")) //If right mouse click
                 {
-                    //Instantiate(portalEnter, hit.point, rotation);
                     Portal1.SetActive(true);
                     Portal1.transform.position = hit.point;
                     Portal1.transform.rotation = rotation;
                     PPos.p1 = hit.point;
-                    Debug.Log("transform: " + Portal1.transform.position);
                 }
                 else if (Input.GetButtonDown("Fire2")) //if left mouse click
                 {
-                    //Instantiate(portalExit, hit.point, rotation);
                     Portal2.SetActive(true);
                     Portal2.transform.position = hit.point;
                     Portal2.transform.rotation = rotation;
