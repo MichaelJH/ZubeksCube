@@ -21,6 +21,7 @@ public class Player_movement : MonoBehaviour {
     private bool jump = false;
     private bool move = false;
     private GravityDir grav;
+    public GameObject line;
 
     void Awake() {
         rb2d = GetComponent<Rigidbody2D>();
@@ -29,6 +30,21 @@ public class Player_movement : MonoBehaviour {
 
     void Update() {
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Platform"));
+
+        // testeroo!
+        int platform = LayerMask.GetMask("PortalPlatform");
+
+        Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 pos = transform.position;
+        Vector2 direction = target - pos;
+
+        RaycastHit2D hit = Physics2D.Raycast(pos, direction, Mathf.Infinity, platform);
+        Vector3 hit3D = new Vector3(hit.point.x, hit.point.y, 0);
+        Vector3[] points = { transform.position, hit3D };
+
+        var renderer = line.GetComponent<LineRenderer>();
+
+        renderer.SetPositions(points);
 
         if (grounded) {
             move = true;
@@ -73,7 +89,7 @@ public class Player_movement : MonoBehaviour {
         }
 
         // movement controls for when gravity is right/left
-        if (move && (grav == GravityDir.Left || grav == GravityDir.Right)) {
+        else if (move && (grav == GravityDir.Left || grav == GravityDir.Right)) {
             // get the horizontal input
             float v = Input.GetAxis("Vertical");
 
@@ -96,11 +112,8 @@ public class Player_movement : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D coll) {
-        if (coll.gameObject.tag == "Platform") {
-            grounded = true;
-        }
         // collisions with portals
-        else if (coll.gameObject.tag == "Portal") {
+        if (coll.gameObject.tag == "Portal") {
             GameObject collidedPortal = coll.gameObject;
             var PortalScript = GetComponent<PortalScript>();
             if (collidedPortal == PortalScript.Portal1)

@@ -48,9 +48,12 @@ public class PortalScript : MonoBehaviour {
         {
             // LayerMask is a bitmap. NameToPlayer("Platform") returns and int, and then we shift 1 to get a bitmask
             int platform = LayerMask.GetMask("PortalPlatform");
+            Vector2 pos = transform.position;
 
             Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Linecast(transform.position, target, platform);
+            Vector2 direction = target - pos;
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Infinity, platform);
 
             if (hit) {
                 Quaternion rotation = GetPortalRotation(hit);

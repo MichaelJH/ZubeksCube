@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour {
     public Transform playerTrans;
 
     void Update() {
-        Vector3 cameraPos = new Vector3(playerTrans.position.x, playerTrans.position.y, -10);
+        Vector3 cameraPos = new Vector3(playerTrans.position.x, playerTrans.position.y, -30);
         transform.position = cameraPos;
     }
 }
