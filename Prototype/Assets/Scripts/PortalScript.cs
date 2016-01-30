@@ -57,7 +57,6 @@ public class PortalScript : MonoBehaviour {
 
             if (hit) {
                 Quaternion rotation = GetPortalRotation(hit);
-                Debug.Log("wall: " + shotOr);
 
                 if (Input.GetButtonDown("Fire1")) //If right mouse click
                 {
@@ -76,8 +75,6 @@ public class PortalScript : MonoBehaviour {
                     PPos.p2Or = shotOr;
                 }
             }
-            else
-                Debug.Log("This failed :(");
         }
      }
 
@@ -87,9 +84,7 @@ public class PortalScript : MonoBehaviour {
     {
         Quaternion rot;
 
-        Debug.Log("beforeTag " + hit.collider.gameObject.tag);
         string collTag = hit.collider.gameObject.tag;
-        Debug.Log("afterTag: " + collTag);
 
         if (collTag == "Floor")
             shotOr = WallOrientation.Floor;
