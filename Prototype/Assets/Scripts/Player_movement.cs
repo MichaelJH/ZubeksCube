@@ -21,9 +21,11 @@ public class Player_movement : MonoBehaviour {
     private bool jump = false;
     private bool move = false;
     private GravityDir grav;
-    public GameObject line;
+    public GameObject portalLinePrefab;
+    private GameObject portalLine;
 
     void Awake() {
+        portalLine = GameObject.Instantiate(portalLinePrefab);
         rb2d = GetComponent<Rigidbody2D>();
         grav = GravityDir.Down;
     }
@@ -31,20 +33,7 @@ public class Player_movement : MonoBehaviour {
     void Update() {
         grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Platform"));
 
-        // testeroo!
-        int platform = LayerMask.GetMask("PortalPlatform");
-
-        Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 pos = transform.position;
-        Vector2 direction = target - pos;
-
-        RaycastHit2D hit = Physics2D.Raycast(pos, direction, Mathf.Infinity, platform);
-        Vector3 hit3D = new Vector3(hit.point.x, hit.point.y, 0);
-        Vector3[] points = { transform.position, hit3D };
-
-        var renderer = line.GetComponent<LineRenderer>();
-
-        renderer.SetPositions(points);
+        DrawAimLine(); // draw the aiming line
 
         if (grounded) {
             move = true;
@@ -70,6 +59,22 @@ public class Player_movement : MonoBehaviour {
             transform.rotation = Quaternion.Euler(0, 0, 90);
             grav = GravityDir.Right;
         }
+    }
+
+    private void DrawAimLine() {
+        int platform = LayerMask.GetMask("PortalPlatform");
+
+        Vector2 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 pos = transform.position;
+        Vector2 direction = target - pos;
+
+        RaycastHit2D hit = Physics2D.Raycast(pos, direction, Mathf.Infinity, platform);
+        Vector3 hit3D = new Vector3(hit.point.x, hit.point.y, 0);
+        Vector3[] points = { transform.position, hit3D };
+
+        var renderer = portalLine.GetComponent<LineRenderer>();
+
+        renderer.SetPositions(points);
     }
 
     void FixedUpdate() {
@@ -116,37 +121,65 @@ public class Player_movement : MonoBehaviour {
         if (coll.gameObject.tag == "Portal") {
             GameObject collidedPortal = coll.gameObject;
             var PortalScript = GetComponent<PortalScript>();
+            float offset = 0.6f;
             if (collidedPortal == PortalScript.Portal1)
             {
                 if (PortalScript.Portal2.activeSelf) {
-                    Vector2 newPos = GetComponent<PortalScript>().PPos.p2;
+                    Vector2 newPos = PortalScript.PPos.p2;
                     PortalScript.WallOrientation orientation = PortalScript.PPos.p2Or;
                     if (orientation == PortalScript.WallOrientation.Left)
-                        newPos.x += 1;
+                        newPos.x += offset;
                     else if (orientation == PortalScript.WallOrientation.Right)
-                        newPos.x -= 1;
+                        newPos.x -= offset;
                     else if (orientation == PortalScript.WallOrientation.Ceiling)
-                        newPos.y -= 1;
+                        newPos.y -= offset;
                     else
-                        newPos.y += 1;
+                        newPos.y += offset;
                     transform.position = newPos;
+                    rb2d.velocity = NewVelocity(2);
                 }
             }
             else {
                 if (PortalScript.Portal1.activeSelf) {
-                    Vector2 newPos = GetComponent<PortalScript>().PPos.p1;
+                    Vector2 newPos = PortalScript.PPos.p1;
                     PortalScript.WallOrientation orientation = PortalScript.PPos.p1Or;
                     if (orientation == PortalScript.WallOrientation.Left)
-                        newPos.x += 1;
+                        newPos.x += offset;
                     else if (orientation == PortalScript.WallOrientation.Right)
-                        newPos.x -= 1;
+                        newPos.x -= offset;
                     else if (orientation == PortalScript.WallOrientation.Ceiling)
-                        newPos.y -= 1;
+                        newPos.y -= offset;
                     else
-                        newPos.y += 1;
+                        newPos.y += offset;
                     transform.position = newPos;
+                    rb2d.velocity = NewVelocity(1);
                 }
             }
         }
+    }
+
+    Vector2 NewVelocity(int exitPortal) {
+        Vector2 result;
+        var PortalScript = GetComponent<PortalScript>();
+        PortalScript.WallOrientation orient;
+        if (exitPortal == 1)
+            orient = PortalScript.PPos.p1Or;
+        else
+            orient = PortalScript.PPos.p2Or;
+        float velocity = rb2d.velocity.magnitude;
+        if (orient == PortalScript.WallOrientation.Left) {
+            result = new Vector2(velocity, 0);
+        }
+        else if (orient == PortalScript.WallOrientation.Right) {
+            result = new Vector2(-velocity, 0);
+        }
+        else if (orient == PortalScript.WallOrientation.Ceiling) {
+            result = new Vector2(0, -velocity);
+        }
+        else {
+            result = new Vector2(0, velocity);
+        }
+
+        return result;
     }
 }
