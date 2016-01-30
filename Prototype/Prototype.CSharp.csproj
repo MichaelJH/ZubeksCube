@@ -62,11 +62,67 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\2DDL\2DLight\AssetUtility\AssetUtility.cs" />
+    <Compile Include="Assets\2DDL\2DLight\CheckUpdate\CheckUpdateAsset.cs" />
+    <Compile Include="Assets\2DDL\2DLight\CheckUpdate\CheckUpdateBuilder.cs" />
+    <Compile Include="Assets\2DDL\2DLight\CheckUpdate\CheckUpdateWindow.cs" />
+    <Compile Include="Assets\2DDL\2DLight\Core\CasterCollider.cs" />
+    <Compile Include="Assets\2DDL\2DLight\Core\DynamicLight.cs" />
+    <Compile Include="Assets\2DDL\2DLight\Settings\DynamicLightSetting.cs" />
+    <Compile Include="Assets\2DDL\2DLight\Settings\SettingsManager.cs" />
+    <Compile Include="Assets\2DDL\2DLight\Settings\SettingsWindow.cs" />
+    <Compile Include="Assets\2DDL\2DLight\Settings\TagLayerClass.cs" />
+    <Compile Include="Assets\2DDL\2DLight\Settings\usage.cs" />
+    <Compile Include="Assets\2DDL\Examples\0 - First Simple\AnimateFireSprite.cs" />
+    <Compile Include="Assets\2DDL\Examples\0 - First Simple\punchRadius.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\BlinkLight.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\CatchTheBlueTorch.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\CharacterMovement.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\CreditsScript.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\OpenEgyptianGate.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\SetProximityFactor.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\UnlockTheExitDoor.cs" />
+    <Compile Include="Assets\2DDL\Examples\00 - DUNGEON - GAME\followPlayer.cs" />
+    <Compile Include="Assets\2DDL\Examples\12 - AddCastersDynamically\UsingAddColliderToScene.cs" />
+    <Compile Include="Assets\2DDL\Examples\12 - AddCastersDynamically\addingCastersUnefficient.cs" />
+    <Compile Include="Assets\2DDL\Examples\13 - ProceduralLightAndCastersCrafting\ProceduralLightAndCasters.cs" />
+    <Compile Include="Assets\2DDL\Examples\2 - MultiplesLights\interface_manager.cs" />
+    <Compile Include="Assets\2DDL\Examples\3 - Visibility and CoverExplosion(shockwave)\ReachedEventManager.cs" />
+    <Compile Include="Assets\2DDL\Examples\3 - Visibility and CoverExplosion(shockwave)\bomb.cs" />
+    <Compile Include="Assets\2DDL\Examples\5 - Events\InstanceEvents.cs" />
+    <Compile Include="Assets\2DDL\Examples\6 - Light with Physics\followBody.cs" />
+    <Compile Include="Assets\2DDL\Examples\8 - ConeOfSight - FieldOfView\bullet.cs" />
+    <Compile Include="Assets\2DDL\Examples\8 - ConeOfSight - FieldOfView\fire.cs" />
+    <Compile Include="Assets\2DDL\Examples\8 - ConeOfSight - FieldOfView\rotate_2.cs" />
+    <Compile Include="Assets\2DDL\Examples\9.0 - Light Car\SpawnCasters.cs" />
+    <Compile Include="Assets\2DDL\Scripts\CharacterController2D\CharacterController2D.cs" />
+    <Compile Include="Assets\2DDL\Scripts\Helpers\CoroutineExt\CoroutineExtentions.cs" />
+    <Compile Include="Assets\2DDL\Scripts\Helpers\ExtendsMe.cs" />
+    <Compile Include="Assets\2DDL\Scripts\Helpers\GLDebug.cs" />
+    <Compile Include="Assets\2DDL\Scripts\Helpers\SmoothFollow.cs" />
+    <Compile Include="Assets\2DDL\Scripts\Helpers\TablaSenoCoseno.cs" />
+    <Compile Include="Assets\2DDL\Scripts\Helpers\TimerClass.cs" />
+    <Compile Include="Assets\2DDL\Scripts\Helpers\interface_touch.cs" />
+    <Compile Include="Assets\2DDL\Scripts\SetRenderQueue.cs" />
+    <Compile Include="Assets\2DDL\Scripts\restoreStone.cs" />
+    <Compile Include="Assets\2DDL\Scripts\rotate.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\GravityController.cs" />
     <Compile Include="Assets\Scripts\Player_movement.cs" />
     <Compile Include="Assets\Scripts\PortalScript.cs" />
     <Compile Include="Assets\Scripts\PortalStruct.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\2DDL\Bugs\READ FIRST.txt" />
+    <None Include="Assets\2DDL\Shaders\CGTexturizing.shader" />
+    <None Include="Assets\2DDL\Shaders\DefaultTexturized.shader" />
+    <None Include="Assets\2DDL\Shaders\DepthMask.shader" />
+    <None Include="Assets\2DDL\Shaders\Gradient-ZFighting.shader" />
+    <None Include="Assets\2DDL\Shaders\OffsetShader.shader" />
+    <None Include="Assets\2DDL\Shaders\RadialGradientAlphaBlend.shader" />
+    <None Include="Assets\2DDL\Shaders\StencilMask.shader" />
+    <None Include="Assets\2DDL\Shaders\StencilObject.shader" />
+    <None Include="Assets\2DDL\Shaders\VertexColor.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

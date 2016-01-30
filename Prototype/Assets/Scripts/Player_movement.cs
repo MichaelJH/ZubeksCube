@@ -23,6 +23,7 @@ public class Player_movement : MonoBehaviour {
     private GravityDir grav;
     public GameObject portalLinePrefab;
     private GameObject portalLine;
+    private bool cameOutOfAFloorPortal;
 
     void Awake() {
         portalLine = GameObject.Instantiate(portalLinePrefab);
@@ -37,6 +38,7 @@ public class Player_movement : MonoBehaviour {
 
         if (grounded) {
             move = true;
+            cameOutOfAFloorPortal = false;
             if (Input.GetButtonDown("Jump")) {
                 jump = true;
             }
@@ -79,7 +81,7 @@ public class Player_movement : MonoBehaviour {
 
     void FixedUpdate() {
         // movement controls for when gravity is up/down
-        if (move && (grav == GravityDir.Down || grav == GravityDir.Up)) {
+        if ((move || cameOutOfAFloorPortal) && (grav == GravityDir.Down || grav == GravityDir.Up)) {
             // get the horizontal input
             float h = Input.GetAxis("Horizontal");
 
@@ -94,7 +96,7 @@ public class Player_movement : MonoBehaviour {
         }
 
         // movement controls for when gravity is right/left
-        else if (move && (grav == GravityDir.Left || grav == GravityDir.Right)) {
+        else if ((move || cameOutOfAFloorPortal) && (grav == GravityDir.Left || grav == GravityDir.Right)) {
             // get the horizontal input
             float v = Input.GetAxis("Vertical");
 
@@ -178,6 +180,7 @@ public class Player_movement : MonoBehaviour {
         }
         else {
             result = new Vector2(0, velocity);
+            cameOutOfAFloorPortal = true;
         }
 
         return result;
